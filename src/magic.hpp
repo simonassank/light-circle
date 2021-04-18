@@ -1,30 +1,33 @@
-#include <Arduino.h>
-#include <arduinoFFT.h>
-
-const static int SAMPLE_COUNT = 64*4;
+#include <Gist.h>
 
 class Magic {
 
-    int samplingFrequency;
-    unsigned long readStartAt = 0;
-    unsigned int samplingPeriod = 1000000 * (1.0 / samplingFrequency);
-    arduinoFFT FFT = arduinoFFT();
+    const static 
+    int samplingFrequency = 22050*4;
+    const static int frameSize = 512;
+
+    Gist<float> gist = Gist<float>(frameSize, samplingFrequency);
+
+    float audioFrame[frameSize];
+    int samplingPeriod;
     int analogPin;
-    double vReal[SAMPLE_COUNT];
-    double vImag[SAMPLE_COUNT];
+    unsigned long readStartAt;
+
     void printVector(
-        double *vData,
+        double *vData,      
+
         uint16_t bufferSize,
         uint8_t scaleType
     );
-    void readAudioSamples();
     void analyze();
 public:
-    Magic(int _analogPin, int _samplingFrequency) {
+    Magic(int _analogPin) {
         analogPin = _analogPin;
-        samplingFrequency = _samplingFrequency;
+        samplingPeriod = 1000000 * (1.0 / samplingFrequency);
+        readStartAt = 0;
     }
 
     void loop();
-    double peakFrequency;
+    float pitch;
+    float power;
 };

@@ -23,6 +23,7 @@
 
 #include "Gist.h"
 #include <assert.h>
+#include <Arduino.h>
 
 //=======================================================================
 template <class T>
@@ -324,7 +325,6 @@ void Gist<T>::performFFT()
     
     // execute kiss fft
     kiss_fft (cfg, fftIn, fftOut);
-    
     // store real and imaginary parts of FFT
     for (int i = 0; i < frameSize; i++)
     {
